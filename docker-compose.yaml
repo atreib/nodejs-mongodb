@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo:5.0
+    container_name: study-mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - ./.mongodb/data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=atreib
+      - MONGO_INITDB_ROOT_PASSWORD=123456
