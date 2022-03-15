@@ -6,9 +6,7 @@ import mongoose from 'mongoose';
 import setupRoutes from './routes';
 
 const { API_PORT, MONGO_USERNAME, MONGO_PASSWORD, MONGODB_PORT, MONGODB_HOST } = process.env;
-
-const main = async () => {
-  const MONGO_CONNSTRING = `
+const MONGO_CONNSTRING = `
     mongodb
     ://${MONGO_USERNAME ?? 'atreib'}
     :${MONGO_PASSWORD ?? '123456'}
@@ -16,6 +14,7 @@ const main = async () => {
     :${MONGODB_PORT ?? '27017'}
   `.replace(/\s/g, '');
 
+const main = async () => {
   // Creating server
   const app = express();
 
