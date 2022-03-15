@@ -1,24 +1,34 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Model } from 'mongoose';
 
 interface IUser {
+  login: string;
   name: string;
+  password: string;
   age: number;
 }
 
-const User = new Schema(
+interface IUserModel extends Model<IUser> {
+  login(login: string, password: string): Promise<IUser | undefined>;
+}
+
+const User = new Schema<IUser, IUserModel>(
   {
-    name: {
-      type: String,
-    },
-    age: {
-      type: Number,
-    },
+    login: { type: String },
+    password: { type: String },
+    name: { type: String },
+    age: { type: Number },
   },
   { strict: true },
 );
 
 User.virtual('label').get((e: IUser) => `${e.name} (${e.age})`);
 
-const UserModel = model('User', User);
+User.statics.login = async function login(username: string, password: string): Promise<IUser | undefined> {
+  const found = await this.findOne({ login: username, password });
+  if (found === null) return undefined;
+  return found;
+};
 
-export { User, UserModel };
+const UserModel = model<IUser, IUserModel>('User', User);
+
+export { User, UserModel, IUser };

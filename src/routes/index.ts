@@ -11,7 +11,6 @@ export default async (app: Express) => {
   for (const file of files) {
     // eslint-disable-next-line no-continue
     if (file === 'index.ts') continue;
-
     const controller = join(__dirname, file);
     (await import(controller)).default(router);
   }

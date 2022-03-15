@@ -1,6 +1,11 @@
 import { Schema, model } from 'mongoose';
 
-const Product = new Schema(
+interface IProduct {
+  label: string;
+  price: number;
+}
+
+const Product = new Schema<IProduct>(
   {
     label: {
       type: String,
@@ -12,6 +17,6 @@ const Product = new Schema(
   { strict: false },
 );
 
-const ProductModel = model('Product', Product);
+const ProductModel = model<IProduct>('Product', Product);
 
-export { Product, ProductModel };
+export { Product, ProductModel, IProduct };

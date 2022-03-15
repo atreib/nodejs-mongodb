@@ -5,13 +5,12 @@ import { json, urlencoded } from 'body-parser';
 import mongoose from 'mongoose';
 import setupRoutes from './routes';
 
-const { API_PORT, MONGO_USERNAME, MONGO_PASSWORD, MONGODB_PORT, MONGODB_HOST } = process.env;
+const { API_PORT, MONGO_USERNAME, MONGO_PASSWORD, MONGODB_PORT, MONGODB_HOST, MONGODB_DATABASE } = process.env;
 const MONGO_CONNSTRING = `
     mongodb
-    ://${MONGO_USERNAME ?? 'atreib'}
-    :${MONGO_PASSWORD ?? '123456'}
-    @${MONGODB_HOST ?? 'localhost'}
+    ://${MONGODB_HOST ?? 'localhost'}
     :${MONGODB_PORT ?? '27017'}
+    /${MONGODB_DATABASE ?? 'study'}
   `.replace(/\s/g, '');
 
 const main = async () => {
@@ -24,7 +23,11 @@ const main = async () => {
   app.use(json());
 
   // Connecting to database
-  mongoose.connect(MONGO_CONNSTRING);
+  mongoose.connect(MONGO_CONNSTRING, {
+    authSource: 'admin',
+    user: MONGO_USERNAME ?? 'atreib',
+    pass: MONGO_PASSWORD ?? '123456',
+  });
 
   // Creating routes
   await setupRoutes(app);
